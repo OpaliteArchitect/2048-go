@@ -1,34 +1,13 @@
-package main
+package game
 
 import (
 	"fmt"
 	"math/rand/v2"
 )
 
-func main() {
-	var board [4][4]int
+type Board [4][4]int
 
-	var direction string
-	turns := 0
-
-	spawnTile(&board)
-	printBoard(&board)
-
-	for {
-		fmt.Print("Enter wasd: ")
-		fmt.Scan(&direction)
-		fmt.Println()
-
-		if playRound(&board, direction) {
-			spawnTile(&board)
-			printBoard(&board)
-			turns++
-		}
-		fmt.Println()
-	}
-}
-
-func spawnTile(board *[4][4]int) {
+func (board *Board) SpawnTile() {
 	for {
 		i, j := rand.IntN(4), rand.IntN(4)
 		if board[i][j] == 0 {
@@ -42,7 +21,7 @@ func spawnTile(board *[4][4]int) {
 	}
 }
 
-func printBoard(board *[4][4]int) {
+func (board *Board) PrintBoard() {
 	for i := range 4 {
 		for j := range 4 {
 			fmt.Print(board[i][j], " ")
@@ -51,15 +30,15 @@ func printBoard(board *[4][4]int) {
 	}
 }
 
-func playRound(board *[4][4]int, direction string) bool {
+func (board *Board) PlayRound(direction string) bool {
 	switch direction {
 	case "a":
 	case "w":
-		rotateClockwise(board, 3)
+		board.rotateClockwise(3)
 	case "d":
-		rotateClockwise(board, 2)
+		board.rotateClockwise(2)
 	case "s":
-		rotateClockwise(board, 1)
+		board.rotateClockwise(1)
 	default:
 		return false
 	}
@@ -95,17 +74,17 @@ func playRound(board *[4][4]int, direction string) bool {
 
 	switch direction {
 	case "w":
-		rotateClockwise(board, 1)
+		board.rotateClockwise(1)
 	case "d":
-		rotateClockwise(board, 2)
+		board.rotateClockwise(2)
 	case "s":
-		rotateClockwise(board, 3)
+		board.rotateClockwise(3)
 	}
 
 	return true
 }
 
-func rotateClockwise(board *[4][4]int, times int) {
+func (board *Board) rotateClockwise(times int) {
 	for range times {
 		for i := range 4 {
 			for j := i + 1; j < 4; j++ {
