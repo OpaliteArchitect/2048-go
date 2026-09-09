@@ -5,9 +5,18 @@ import (
 	"math/rand/v2"
 )
 
-type Board [4][4]int
+type board [4][4]int
 
-func (board *Board) SpawnTile() {
+type Direction int
+
+const (
+	Up Direction = iota
+	Left
+	Right
+	Down
+)
+
+func (board *board) SpawnTile() {
 	for {
 		i, j := rand.IntN(4), rand.IntN(4)
 		if board[i][j] == 0 {
@@ -21,7 +30,7 @@ func (board *Board) SpawnTile() {
 	}
 }
 
-func (board *Board) PrintBoard() {
+func (board *board) PrintBoard() {
 	for i := range 4 {
 		for j := range 4 {
 			fmt.Print(board[i][j], " ")
@@ -30,14 +39,14 @@ func (board *Board) PrintBoard() {
 	}
 }
 
-func (board *Board) PlayRound(direction string) bool {
+func (board *board) playRound(direction Direction) bool {
 	switch direction {
-	case "a":
-	case "w":
+	case Left:
+	case Up:
 		board.rotateClockwise(3)
-	case "d":
+	case Right:
 		board.rotateClockwise(2)
-	case "s":
+	case Down:
 		board.rotateClockwise(1)
 	default:
 		return false
@@ -73,18 +82,18 @@ func (board *Board) PlayRound(direction string) bool {
 	}
 
 	switch direction {
-	case "w":
+	case Up:
 		board.rotateClockwise(1)
-	case "d":
+	case Right:
 		board.rotateClockwise(2)
-	case "s":
+	case Down:
 		board.rotateClockwise(3)
 	}
 
 	return true
 }
 
-func (board *Board) rotateClockwise(times int) {
+func (board *board) rotateClockwise(times int) {
 	for range times {
 		for i := range 4 {
 			for j := i + 1; j < 4; j++ {
