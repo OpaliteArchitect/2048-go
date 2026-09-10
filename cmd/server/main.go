@@ -21,6 +21,22 @@ type Server struct {
 	game game.Game
 }
 
+func (s *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte("Welcome to 2048 API server!"))
+}
+
+func (s *Server) HandleBoard(w http.ResponseWriter, r *http.Request) {
+	resp := GameResponse{
+		Board: s.game.GetBoard(),
+		Turns: s.game.GetTurns(),
+		Moved: false,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+}
+
 func (s *Server) HandleMove(w http.ResponseWriter, r *http.Request) {
 	var req MoveRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -40,17 +56,14 @@ func (s *Server) HandleMove(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
-func (s *Server) HandleIndex(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "# 2048 Game API Server\n\nWelcome! Use this server to control the running 2048 game session over HTTP.", http.StatusOK)
-}
-
 func main() {
 	g := game.New()
 	server := Server{game: &g}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("POST /move", server.HandleMove)
 	mux.HandleFunc("GET /", server.HandleIndex)
+	mux.HandleFunc("GET /board", server.HandleBoard)
+	mux.HandleFunc("POST /move", server.HandleMove)
 
 	http.ListenAndServe(":2048", mux)
 }
