@@ -5,7 +5,7 @@ import (
 	"math/rand/v2"
 )
 
-type board [4][4]int
+type Board [4][4]int
 
 type Direction int
 
@@ -16,7 +16,7 @@ const (
 	Down
 )
 
-func (board *board) SpawnTile() {
+func (board *Board) SpawnTile() {
 	for {
 		i, j := rand.IntN(4), rand.IntN(4)
 		if board[i][j] == 0 {
@@ -30,7 +30,7 @@ func (board *board) SpawnTile() {
 	}
 }
 
-func (board *board) PrintBoard() {
+func (board *Board) PrintBoard() {
 	for i := range 4 {
 		for j := range 4 {
 			fmt.Print(board[i][j], " ")
@@ -39,7 +39,7 @@ func (board *board) PrintBoard() {
 	}
 }
 
-func (board *board) playRound(direction Direction) bool {
+func (board *Board) playRound(direction Direction) bool {
 	switch direction {
 	case Left:
 	case Up:
@@ -93,7 +93,7 @@ func (board *board) playRound(direction Direction) bool {
 	return true
 }
 
-func (board *board) rotateClockwise(times int) {
+func (board *Board) rotateClockwise(times int) {
 	for range times {
 		for i := range 4 {
 			for j := i + 1; j < 4; j++ {
