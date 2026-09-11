@@ -1,7 +1,7 @@
 package game
 
 type game struct {
-	board board
+	board Board
 	turns int
 }
 
@@ -9,6 +9,7 @@ type Game interface {
 	Move(direction Direction) bool
 	PrintBoard()
 	GetTurns() int
+	GetBoard() Board
 }
 
 func (game *game) Move(direction Direction) bool {
@@ -23,7 +24,7 @@ func (game *game) Move(direction Direction) bool {
 
 func New() game {
 	game := game{
-		board: board{},
+		board: Board{},
 		turns: 0,
 	}
 
@@ -39,4 +40,8 @@ func (game *game) PrintBoard() {
 
 func (game *game) GetTurns() int {
 	return game.turns
+}
+
+func (game *game) GetBoard() Board {
+	return game.board
 }
